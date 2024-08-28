@@ -1,0 +1,56 @@
+<div mat-dialog-content>
+  <div class="wrapper">
+    <div class="card">
+      <div class="infos">
+        <div *ngFor="let subAdmin of subAdmins">
+          <div class="name">
+            <h2>{{ subAdmin.name }}</h2>
+          </div>
+          <div class="text">
+            <h4>
+              {{ "general.username" | translate }} - {{ subAdmin.username }}
+            </h4>
+            <h4>{{ "general.email" | translate }} - {{ subAdmin.email }}</h4>
+          </div>
+          <p class="text">
+            {{ "general.company" | translate }} - {{ subAdmin.company!.name }}
+          </p>
+          <p class="text">
+            {{ "nav.category" | translate }} -
+            {{ subAdmin.company!.category!.name }}
+          </p>
+          <p class="text">
+            {{ "general.created-on" | translate }} -
+            {{ subAdmin.createdAt | date }}
+          </p>
+          <br />
+          <h3>{{ "subadmins.permissions" | translate }}</h3>
+          <br />
+          <ng-container *ngFor="let permission of subAdmin.permissions">
+            <div class="permissions-container">
+              <p style="margin-left: 5px; font-size: 0.9em; font-weight: 600">
+                {{ permission.module }}
+              </p>
+              <div style="display: flex; width: 100%">
+                <ng-container
+                  *ngFor="let action of permission.actions; let i = index"
+                >
+                  <p class="text" style="margin-left: 25px">
+                    {{ action.name }}
+                  </p>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="links">
+          <!-- <button class="follow" (click)="acceptJobRequest(data.booking.id)">Accept Job</button> &nbsp;&nbsp; -->
+          <button class="view" (click)="closeModal()">
+            {{ "general.close" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

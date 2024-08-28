@@ -1,0 +1,160 @@
+<app-sidenav></app-sidenav>
+
+<!-- CONTENT -->
+<section id="content">
+  <!-- NAVBAR -->
+  <nav>
+    <a
+      class="profile"
+      *ngIf="userObject || companyObject"
+      (click)="userProfile()"
+    >
+      <img [src]="imageUrl" alt="Image" />
+    </a>
+    <a
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      style="vertical-align: middle"
+    >
+      <mat-icon>language</mat-icon>
+    </a>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item style="flex: content" (click)="useLanguage('en')">
+        <img
+          src="/assets/svg-country-flags/png100px/us.png"
+          alt=""
+          style="width: 35px; margin-right: 10px; vertical-align: middle"
+        />
+        <span>English</span>
+      </button>
+      <button mat-menu-item style="flex: content" (click)="useLanguage('am')">
+        <img
+          src="/assets/svg-country-flags/png100px/et.png"
+          alt=""
+          style="width: 35px; margin-right: 10px; vertical-align: middle"
+        />
+        <span>አማርኛ</span>
+      </button>
+      <button mat-menu-item style="flex: content" (click)="useLanguage('so')">
+        <img
+          src="/assets/svg-country-flags/png100px/so.png"
+          alt=""
+          style="width: 35px; margin-right: 10px; vertical-align: middle"
+        />
+        <span>Somaali</span>
+      </button>
+    </mat-menu>
+  </nav>
+  <!-- NAVBAR -->
+  <main>
+    <mat-progress-bar
+      class="mt10"
+      mode="indeterminate"
+      *ngIf="busy"
+    ></mat-progress-bar>
+    <div class="head-title">
+      <div class="left">
+        <h1>{{ "sidenav.sub-admins" | translate }}</h1>
+        <ul class="breadcrumb">
+          <li>
+            <a href="#">{{ "sidenav.sub-admins" | translate }}</a>
+          </li>
+          <li><i class="bx bx-chevron-right"></i></li>
+          <li>
+            <a class="active" href="#">{{ "general.home" | translate }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="buttonSub" *ngIf="claims.includes('create_users')">
+        <button routerLink="/subadmins-create" class="buttonNew slide">
+          {{ "subadmins.add-subadmins" | translate }}
+        </button>
+      </div>
+
+      <div class="table-data">
+        <div class="order">
+          <div class="head"></div>
+          <table>
+            <thead>
+              <tr>
+                <th>{{ "general.name" | translate }}</th>
+                <th>{{ "general.username" | translate }}</th>
+                <th>{{ "general.email" | translate }}</th>
+                <th>{{ "admins.admin-number" | translate }}</th>
+                <th>{{ "general.created-on" | translate }}</th>
+                <th>{{ "general.status" | translate }}</th>
+                <th>{{ "general.action" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let subadmin of subadmins; let i = index">
+                <td>
+                  <p>{{ subadmin.name }}</p>
+                </td>
+                <td>
+                  <p>{{ subadmin.username }}</p>
+                </td>
+                <td>
+                  <p>{{ subadmin.email }}</p>
+                </td>
+                <td>
+                  <p>{{ subadmin.adminNumber }}</p>
+                </td>
+                <td>
+                  <p>{{ subadmin.createdAt | date : "short" }}</p>
+                </td>
+                <td>
+                  <div *ngIf="subadmin.status === 1">
+                    <span class="status1"></span>
+                  </div>
+                  <div *ngIf="subadmin.status === 0">
+                    <span class="status0"></span>
+                  </div>
+                </td>
+
+                <td>
+                  <span mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </span>
+                  <mat-menu #menu="matMenu">
+                    <button
+                      mat-menu-item
+                      (click)="edit(subadmin)"
+                      *ngIf="claims.includes('create_users')"
+                    >
+                      <mat-icon>edit</mat-icon>
+                      <span>{{ "general.edit" | translate }}</span>
+                    </button>
+                    <button
+                      mat-menu-item
+                      (click)="viewSubadmin(subadmin.id)"
+                      *ngIf="claims.includes('access_users')"
+                    >
+                      <mat-icon>visibility</mat-icon>
+                      <span>{{ "general.view" | translate }}</span>
+                    </button>
+                    <button
+                      mat-menu-item
+                      (click)="delete(subadmin.id)"
+                      *ngIf="claims.includes('delete_users')"
+                    >
+                      <mat-icon>delete</mat-icon>
+                      <span>{{ "general.delete" | translate }}</span>
+                    </button>
+                  </mat-menu>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <mat-paginator
+            [pageSize]="5"
+            [pageSizeOptions]="[5, 10, 25]"
+            showFirstLastButtons
+            (page)="onPageChange($event)"
+          ></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>

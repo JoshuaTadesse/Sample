@@ -1,0 +1,152 @@
+<app-sidenav></app-sidenav>
+
+<!-- CONTENT -->
+<div id="content">
+  <!-- NAVBAR -->
+  <nav>
+    <a
+      class="profile"
+      *ngIf="userObject || companyObject"
+      (click)="userProfile()"
+    >
+      <img [src]="imageUrl" alt="Image" />
+    </a>
+    <a
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      style="vertical-align: middle"
+    >
+      <mat-icon>language</mat-icon>
+    </a>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item style="flex: content" (click)="useLanguage('en')">
+        <img
+          src="/assets/svg-country-flags/png100px/us.png"
+          alt=""
+          style="width: 35px; margin-right: 10px; vertical-align: middle"
+        />
+        <span>English</span>
+      </button>
+      <button mat-menu-item style="flex: content" (click)="useLanguage('am')">
+        <img
+          src="/assets/svg-country-flags/png100px/et.png"
+          alt=""
+          style="width: 35px; margin-right: 10px; vertical-align: middle"
+        />
+        <span>አማርኛ</span>
+      </button>
+      <button mat-menu-item style="flex: content" (click)="useLanguage('so')">
+        <img
+          src="/assets/svg-country-flags/png100px/so.png"
+          alt=""
+          style="width: 35px; margin-right: 10px; vertical-align: middle"
+        />
+        <span>Somaali</span>
+      </button>
+    </mat-menu>
+  </nav>
+  <!-- NAVBAR -->
+  <main>
+    <mat-progress-bar
+      class="mt10"
+      mode="indeterminate"
+      *ngIf="busy"
+    ></mat-progress-bar>
+    <div class="head-title">
+      <div class="left">
+        <h1>{{ "sidenav.sub-admins" | translate }}</h1>
+        <ul class="breadcrumb">
+          <li>
+            <a href="#">{{ "subadmins.edit-subadmins" | translate }}</a>
+          </li>
+          <li><i class="bx bx-chevron-right"></i></li>
+          <li>
+            <a class="active" routerLink="/companysubadmins">{{
+              "general.back" | translate
+            }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          class="buttonNew slide"
+          (click)="save()"
+          [disabled]="!f.valid"
+        >
+          {{ "general.submit" | translate }}
+        </button>
+      </div>
+
+      <div class="table-data"></div>
+    </div>
+  </main>
+  <div class="formField">
+    <form #f="ngForm" [formGroup]="form" id="userForm">
+      <div class="row">
+        <mat-form-field appearance="fill" class="example-full-width">
+          <mat-label>{{ "general.name" | translate }}</mat-label>
+          <input matInput type="text" formControlName="name" id="name" />
+          <mat-error
+            *ngIf="form.get('name')?.invalid && form.get('name')?.touched"
+            >{{ "general.name-error" | translate }}</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="example-full-width">
+          <mat-label>{{ "general.username" | translate }}</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="username"
+            id="username"
+          />
+          <mat-error
+            *ngIf="
+              form.get('username')?.invalid && form.get('username')?.touched
+            "
+            >{{ "general.username-error" | translate }}</mat-error
+          >
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field appearance="fill" class="example-half-width">
+          <mat-label>{{ "general.email" | translate }}</mat-label>
+          <input matInput type="text" formControlName="email" id="email" />
+          <mat-error
+            *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+            >{{ "general.email-error" | translate }}</mat-error
+          >
+        </mat-form-field>
+        <div class="statusdiv">
+          <mat-slide-toggle class="status" formControlName="status">{{
+            "general.status" | translate
+          }}</mat-slide-toggle>
+        </div>
+      </div>
+      <br />
+      <br />
+      <h2>{{ "subadmins.permissions" | translate }}</h2>
+      <br />
+      <ng-container *ngFor="let permission of permissions; let p = index">
+        <div class="permissions-container">
+          <h3 class="permissions-font">{{ permission.module }}</h3>
+          <div style="display: flex; width: 70%">
+            <ng-container
+              *ngFor="let action of permission.actions; let i = index"
+            >
+              <mat-checkbox
+                style="margin-right: 10px; flex: 1"
+                (change)="selected(permission.module, action.name)"
+                [checked]="existingActions.includes(action.name)"
+              >
+                <!-- [formControl]="permissionCtrl" -->
+                {{ action.name }}
+              </mat-checkbox>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+    </form>
+  </div>
+</div>
